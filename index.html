@@ -1870,7 +1870,7 @@
         <section class="panel picker" id="pickerPanel" aria-labelledby="picker-title">
           <div class="panel-head">
             <h2 id="picker-title">Civilization draw</h2>
-            <span class="count" id="remainingCount">23 available</span>
+            <span class="count" id="remainingCount">25 available</span>
           </div>
           <div class="ban-toolbar">
             <div class="ban-toolbar-controls">
@@ -2073,18 +2073,6 @@
 
       var query = new URLSearchParams(window.location.search);
       var shouldAutostart = query.get('autostart') === '1';
-      var RAIDERS_LAUNCH_DATE = '2026-10-29';
-
-      function localDateKey(date) {
-        var year = date.getFullYear();
-        var month = String(date.getMonth() + 1).padStart(2, '0');
-        var day = String(date.getDate()).padStart(2, '0');
-        return year + '-' + month + '-' + day;
-      }
-
-      function raidersLaunchIsActive(date) {
-        return localDateKey(date) >= RAIDERS_LAUNCH_DATE;
-      }
 
       var coreCivilizations = [
         'Abbasid Dynasty', 'Ayyubids', 'Byzantines', 'Chinese', 'Delhi Sultanate',
@@ -2094,8 +2082,11 @@
         'Sengoku Daimyo', 'Tughlaq Dynasty', "Zhu Xi's Legacy"
       ];
       var raidersCivilizations = ['Vikings', 'Scots'];
-      var raidersLaunchActive = raidersLaunchIsActive(new Date());
-      var civilizations = coreCivilizations.concat(raidersLaunchActive ? raidersCivilizations : []);
+      // Vikings and Scots joined the picker on Oct 29, ahead of their tech
+      // trees, which arrive with the full tech tree update on Nov 1. Their
+      // flags are the staged temporary flags until that same update swaps
+      // in the real ones.
+      var civilizations = coreCivilizations.concat(raidersCivilizations);
 
       var civilizationFlags = {
         'Abbasid Dynasty': 'data:image/webp;base64,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',
@@ -2209,8 +2200,7 @@
       var clearBansBtn = document.getElementById('clearBansBtn');
       var pickerPanel = document.getElementById('pickerPanel');
       pickerPanel.dataset.rosterSize = String(civilizations.length);
-      pickerPanel.dataset.raidersLaunchDate = RAIDERS_LAUNCH_DATE;
-      pickerPanel.dataset.raidersLaunchState = raidersLaunchActive ? 'active' : 'staged';
+      pickerPanel.dataset.raidersLaunchState = 'active';
       var cycleNote = document.getElementById('cycleNote');
       var result = document.getElementById('result');
       var civName = document.getElementById('civName');
@@ -2317,6 +2307,10 @@
           }
           collectTreeItems(branch[id], items, seen);
         });
+      }
+
+      function hasTechTree(name) {
+        return Object.prototype.hasOwnProperty.call(civilizationSlugs, name);
       }
 
       function fetchTechTree(name) {
@@ -2630,6 +2624,15 @@
         techOverlay.hidden = false;
         document.body.classList.add('tech-open');
         techClose.focus();
+        if (!hasTechTree(name)) {
+          techSubtitle.textContent = 'In the draw now · Tech tree arrives Sunday, Nov 1';
+          techBody.innerHTML = '';
+          var pending = document.createElement('div');
+          pending.className = 'tech-status';
+          pending.textContent = name + ' can be drawn now. Its tech tree arrives with the full tech tree update on Sunday, Nov 1.';
+          techBody.appendChild(pending);
+          return;
+        }
         fetchTechTree(name).then(function (data) {
           if (requestToken !== techRequestToken) return;
           if (data.tree.classes) techSubtitle.textContent = data.tree.classes;
@@ -2738,7 +2741,7 @@
           item.setAttribute('aria-label', (isBanned ? 'Unban ' : 'Ban ') + name + (isPlayed ? ', selected this round' : ''));
         } else {
           item.removeAttribute('aria-pressed');
-          item.setAttribute('aria-label', 'Open ' + name + ' tech tree' + (isPlayed ? ', selected this round' : ''));
+          item.setAttribute('aria-label', (hasTechTree(name) ? 'Open ' + name + ' tech tree' : name + ' tech tree arrives Nov 1') + (isPlayed ? ', selected this round' : ''));
         }
       }
 
@@ -2753,7 +2756,7 @@
         if (current) {
           var currentIsBanned = banned.has(current);
           civFlag.classList.toggle('is-banned', currentIsBanned);
-          civFlag.setAttribute('aria-label', banMode.checked ? ((currentIsBanned ? 'Unban ' : 'Ban ') + current) : ('Open ' + current + ' tech tree'));
+          civFlag.setAttribute('aria-label', banMode.checked ? ((currentIsBanned ? 'Unban ' : 'Ban ') + current) : (hasTechTree(current) ? 'Open ' + current + ' tech tree' : current + ' tech tree arrives Nov 1'));
           if (banMode.checked) civFlag.setAttribute('aria-pressed', String(currentIsBanned));
           else civFlag.removeAttribute('aria-pressed');
         }
